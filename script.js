@@ -11,12 +11,15 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedTiles = [];
         isVerified = false;
         mainContainer.innerHTML = "";
+
         const h3 = document.createElement("h3");
         h3.id = "h";
         h3.textContent = "Please click on the identical tiles to verify that you are not a robot.";
         mainContainer.appendChild(h3);
+
         const imgContainer = document.createElement("div");
         imgContainer.className = "image-container";
+
         let chosenClasses = [...classNames];
         const duplicateClass = classNames[Math.floor(Math.random() * classNames.length)];
         chosenClasses.push(duplicateClass);
@@ -36,11 +39,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function handleImageClick(img) {
         if (isVerified) return;
-        if (selectedTiles.includes(img)) return;
-        if (selectedTiles.length >= 2) return;
 
-        selectedTiles.push(img);
-        img.style.border = "3px solid #0000FF"; 
+        const index = selectedTiles.indexOf(img);
+        if (index > -1) {
+            selectedTiles.splice(index, 1);
+            img.style.border = "";
+        } else {
+            if (selectedTiles.length >= 2) return;
+
+            selectedTiles.push(img);
+            img.style.border = "3px solid #0000FF";
+        }
 
         updateUI();
     }
@@ -51,7 +60,6 @@ document.addEventListener("DOMContentLoaded", () => {
         if (existingReset) existingReset.remove();
         if (existingVerify) existingVerify.remove();
 
-        // State 2: At least one tile clicked -> show Reset button
         if (selectedTiles.length > 0) {
             const resetBtn = document.createElement("button");
             resetBtn.id = "reset";
@@ -97,4 +105,5 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     initGame();
+});
 });
